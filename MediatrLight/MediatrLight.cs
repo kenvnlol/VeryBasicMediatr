@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -27,6 +28,6 @@ public class MediatrLight : IMediatrLight
         IRequestDict.TryGetValue(requestType, out var handlerType);
             var handler = _serviceProvider.GetService(handlerType);
 
-        return await ((IRequestHandler<IRequest<TResponse>, TResponse>)handler).Handle(request);
+        return await (Task<TResponse>)handler.GetType().GetMethod("Handle").Invoke(handler, new object[] {request, cancellationToken});
     }
 }

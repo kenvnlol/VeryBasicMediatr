@@ -12,6 +12,11 @@ public static class IServiceCollectionExtensions
 
         var mappings = requestHandling.CreateMappings(assembly);
 
+        foreach (var mapping in mappings)
+        {
+            service.AddTransient(mapping.Value);
+        }
+
         service.AddSingleton(mappings);
         service.AddScoped<IMediatrLight, MediatrLight>();
 
